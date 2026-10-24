@@ -1,0 +1,11 @@
+{
+  "_note": "Ticketmaster-shaped fixtures. weekday/local_time are placed onto matching days inside the requested window.",
+  "events": [
+    {"name": "Friday Stand-up Showcase", "weekday": "Friday", "local_time": "20:00", "venue": {"name": "Cobb's Comedy Club", "lat": 37.8037, "lng": -122.4120}, "price_min": 25.0, "segment": "Arts & Theatre", "genre": "Comedy"},
+    {"name": "Indie Night at The Chapel", "weekday": "Saturday", "local_time": "20:00", "venue": {"name": "The Chapel", "lat": 37.7605, "lng": -122.4212}, "price_min": 22.0, "segment": "Music", "genre": "Rock"},
+    {"name": "Warriors Home Game", "weekday": "Sunday", "local_time": "17:00", "venue": {"name": "Chase Center", "lat": 37.7680, "lng": -122.3877}, "price_min": 65.0, "segment": "Sports", "genre": "Basketball"},
+    {"name": "Sunday Improv Jam", "weekday": "Sunday", "local_time": "19:00", "venue": {"name": "Cobb's Comedy Club", "lat": 37.8037, "lng": -122.4120}, "price_min": 15.0, "segment": "Arts & Theatre", "genre": "Comedy"},
+    {"name": "Weeknight Jazz Session", "weekday": "Wednesday", "local_time": "19:30", "venue": {"name": "The Chapel", "lat": 37.7605, "lng": -122.4212}, "price_min": 18.0, "segment": "Music", "genre": "Jazz"},
+    {"name": "Thursday Comedy Open Mic", "weekday": "Thursday", "local_time": "19:30", "venue": {"name": "Cobb's Comedy Club", "lat": 37.8037, "lng": -122.4120}, "price_min": 10.0, "segment": "Arts & Theatre", "genre": "Comedy"}
+  ]
+}
