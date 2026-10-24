@@ -1,0 +1,45 @@
+{
+  "_comment": "Synthetic Discord group DM for the Discord MCP spike. scripts/discord_mcp_fixture_server.py serves it through the real discord.py-self-mcp tool code; discord_read_messages.txt is that server's read_messages output for this channel.",
+  "self": "alex.codes",
+  "users": [
+    {"id": "290000000000000001", "name": "alex.codes", "global_name": "Alex"},
+    {"id": "290000000000000002", "name": "samwise_k", "global_name": "Sam K"},
+    {"id": "290000000000000003", "name": "jordo", "global_name": "Jordan"},
+    {"id": "290000000000000004", "name": "priya.r", "global_name": "Priya"},
+    {"id": "290000000000000005", "name": "riley_b", "global_name": "Riley"},
+    {"id": "290000000000000006", "name": "kev.from.work", "global_name": "Kev"}
+  ],
+  "channels": [
+    {
+      "id": "1291000000000000001",
+      "type": "group",
+      "name": "the crew 🌉",
+      "recipients": ["samwise_k", "jordo", "priya.r", "riley_b", "kev.from.work"],
+      "messages": [
+        {"at": "2025-10-24T18:05:00-07:00", "author": "alex.codes", "content": "bonfire is ON tonight. ocean beach pit 7, bring layers"},
+        {"at": "2025-10-24T22:41:00-07:00", "author": "samwise_k", "content": "this is the best night of the year, I'm calling it"},
+        {"key": "seagull", "at": "2025-10-24T22:44:00-07:00", "author": "riley_b", "content": "the seagull took my ENTIRE s'more. not a bite. the whole thing"},
+        {"at": "2025-10-24T22:46:00-07:00", "author": "jordo", "content": "that seagull had a plan and we were not part of it 🐦", "reply_to": "seagull"},
+        {"at": "2025-10-25T09:12:00-07:00", "author": "priya.r", "content": "", "attachments": [{"filename": "bonfire.jpg", "content_type": "image/jpeg", "size": 248113, "width": 1600, "height": 1200}]},
+        {"key": "mariah", "at": "2025-12-13T23:58:00-08:00", "author": "priya.r", "content": "Jordan, we need to talk about your Mariah"},
+        {"at": "2025-12-13T23:59:00-08:00", "author": "jordo", "content": "it's called RANGE, look it up 🎤", "reply_to": "mariah"},
+        {"at": "2026-03-02T10:00:00-08:00", "author": "samwise_k", "content": "has anyone seen my blue jacket"},
+        {"at": "2026-06-20T16:02:00-07:00", "author": "riley_b", "content": "who brought only chips? 🥲"},
+        {"at": "2026-08-15T21:30:00-07:00", "author": "samwise_k", "content": "the lock was rigged"},
+        {"at": "2026-08-15T21:32:00-07:00", "author": "priya.r", "content": "two minutes. TWO. we're going back and we're winning"},
+        {"at": "2026-09-27T23:10:00-07:00", "author": "priya.r", "content": "final scores:\nSam 10\nPriya 9\nJordan 4 (robber placement was personal)"},
+        {"at": "2026-09-27T23:12:00-07:00", "author": "samwise_k", "content": "<@290000000000000003> you put the robber on me FOUR times", "clean_content": "@Jordan you put the robber on me FOUR times"},
+        {"at": "2026-10-10T17:00:00-07:00", "author": "alex.codes", "content": "bowling tonight @ presidio bowl, 7:30?"},
+        {"at": "2026-10-10T17:03:00-07:00", "author": "riley_b", "content": "can't tonight, keeping it under $25 this week 😩"},
+        {"at": "2026-10-10T22:15:00-07:00", "author": "jordo", "content": "bowled a 43 and I have never been prouder"},
+        {"at": "2026-10-10T22:16:00-07:00", "author": "samwise_k", "content": "bumpers were up for ONE frame and we agreed never to speak of it"},
+        {"at": "2026-10-10T22:20:00-07:00", "author": "kev.from.work", "content": "who is this group chat and why was I added 😅"},
+        {"at": "2026-10-15T12:30:00-07:00", "author": "riley_b", "content": "dumpling night at mine saturday 6pm, I'm buying the wrappers"},
+        {"key": "dumplings", "at": "2026-10-17T21:40:00-07:00", "author": "priya.r", "content": "Riley's dumplings > every restaurant in the Richmond. I said what I said"},
+        {"key": "folding", "at": "2026-10-17T21:42:00-07:00", "author": "samwise_k", "content": "folding count: me 12, Jordan 3. Jordan's dumplings: structurally unsound 🥟"},
+        {"at": "2026-10-17T21:45:00-07:00", "author": "jordo", "content": "“structurally unsound” is a choice of words, Sam", "reply_to": "folding"},
+        {"at": "2026-10-23T19:00:00-07:00", "author": "alex.codes", "content": "ok who's free this weekend"}
+      ]
+    }
+  ]
+}

@@ -9,10 +9,10 @@ tests can scan prompts for private data.
 import json
 import logging
 import re
-from datetime import datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from typing import Any, Callable
 
-from shared.config import env, iso, parse_iso
+from shared.config import TZ, env, iso, parse_iso
 
 log = logging.getLogger("lore.llm")
 
@@ -211,6 +211,27 @@ def template_constraints(text: str) -> dict:
 
 def hit_or_none(pattern: str, text: str):
     return re.search(pattern, text)
+
+
+LOGISTICS_RE = re.compile(r"\?\s*$|\b(tonight|tomorrow|omw|on my way|running late|bring|meet (at|you)|"
+                          r"who'?s (in|free|coming)|venmo)\b", re.I)
+
+
+def template_discord_lore(messages: list[dict], known: list[dict]) -> list[dict]:
+    """Offline fallback: chat lines from a known hangout's day (until noon the next day).
+
+    Never creates hangouts; that needs the LLM to tell a plan from something that happened.
+    """
+    out = []
+    for h in known:
+        start = datetime.combine(date.fromisoformat(h["date"][:10]), time(0), TZ)
+        end = start + timedelta(days=1, hours=12)
+        ids = [m["id"] for m in messages
+               if start <= parse_iso(m["at"]) < end and len(m["text"]) >= 12
+               and not LOGISTICS_RE.search(m["text"])]
+        if ids:
+            out.append({"hangout_id": h["id"], "quote_ids": ids})
+    return out
 
 
 def template_lore_answer(question: str, facts: list[dict]) -> str:
@@ -423,3 +444,48 @@ class LLM:
         return await self.json_call("LORE", self.model_large, system, user, validate,
                                     lambda: template_lore_answer(question, facts),
                                     history=history[-10:])
+
+    async def discord_lore(self, messages: list[dict], members: list[str],
+                           known: list[dict]) -> list[dict]:
+        """messages: [{id, at, speaker, text}] from members only, private lines already removed.
+
+        Returns [{hangout_id, quote_ids}] for known hangouts and
+        [{hangout_id: None, date, title, category, place, attendees, quote_ids}] for new ones.
+        The model only picks message ids; quote text is copied from Discord by the caller.
+        """
+        system = (
+            "You read a friend group's chat log and connect it to the group's hangout history. Output "
+            '{"hangouts": [{"hangout_id": int or null, "date": "YYYY-MM-DD", "title", "category", '
+            '"place", "attendees": [member names], "quote_ids": [message ids]}]}. '
+            "Use hangout_id when lines are about a known hangout. Use null only for a hangout the chat "
+            "shows clearly happened (not one that was only planned), and fill date, title, category, "
+            f"place and attendees. category must be one of: {', '.join(CATEGORIES)}. quote_ids: up to 3 "
+            "funny or memorable lines per hangout, as ids from the log; never logistics, plans or "
+            "questions. Never invent hangouts, people or places.")
+        user = json.dumps({"members": members, "known_hangouts": known, "messages": messages},
+                          ensure_ascii=False)
+        by_id = {m["id"] for m in messages}
+        known_ids = {h["id"] for h in known}
+        days = sorted(m["at"][:10] for m in messages)
+
+        def validate(data):
+            out = []
+            for h in data["hangouts"]:
+                ids = [str(i) for i in (h.get("quote_ids") or []) if str(i) in by_id][:5]
+                if h.get("hangout_id") is not None:
+                    hid = int(h["hangout_id"])
+                    assert hid in known_ids, f"unknown hangout_id {hid}"
+                    out.append({"hangout_id": hid, "quote_ids": ids})
+                    continue
+                day = date.fromisoformat(str(h["date"])[:10]).isoformat()
+                assert days and days[0] <= day <= days[-1], f"date {day} is outside the chat log"
+                cat = str(h.get("category", "")).strip().lower().replace(" ", "_")
+                out.append({"hangout_id": None, "date": day, "title": str(h["title"]).strip()[:80],
+                            "category": cat if cat in CATEGORIES else "food",
+                            "place": str(h.get("place") or "").strip()[:80] or None,
+                            "attendees": [a for a in (h.get("attendees") or []) if a in members],
+                            "quote_ids": ids})
+            return out
+
+        return await self.json_call("DISCORD_LORE", self.model_large, system, user, validate,
+                                    lambda: template_discord_lore(messages, known))

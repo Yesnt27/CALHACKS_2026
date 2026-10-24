@@ -169,6 +169,23 @@ class LoreDB:
             (recap, json.dumps(merged, ensure_ascii=False), hid))
         self.conn.commit()
 
+    def add_quotes(self, hid: int, quotes: list[dict], limit: int = 3) -> int:
+        """Append up to `limit` quotes whose text isn't stored yet; returns how many were added."""
+        h = self.hangout(hid)
+        if h is None:
+            return 0
+        seen = {q["text"] for q in h["quotes"]}
+        new = []
+        for q in quotes:
+            if q["text"] not in seen and len(new) < limit:
+                seen.add(q["text"])
+                new.append(q)
+        if new:
+            self.conn.execute("UPDATE hangouts SET quotes=? WHERE id=?",
+                              (json.dumps(h["quotes"] + new, ensure_ascii=False), hid))
+            self.conn.commit()
+        return len(new)
+
     def load_seed(self, path: str | Path, reset: bool = False) -> int:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         if reset:
