@@ -88,8 +88,10 @@ def main() -> None:
     db = LoreDB(resolve_path(env("DB_PATH", "./data/lore.db")))
     db.sync_members(load_members())
     brain = GroupBrain(db, LLM(), GroupConfig.from_env())
+    endpoint = env("GROUP_AGENT_ENDPOINT")  # public https://…/submit; empty = Agentverse mailbox
     agent = build_agent(brain, seed=env("GROUP_AGENT_SEED") or None,
-                        port=int(env("GROUP_AGENT_PORT", "8000")))
+                        port=int(env("GROUP_AGENT_PORT", "8000")),
+                        mailbox=not endpoint, endpoint=[endpoint] if endpoint else None)
     agent.run()
 
 

@@ -73,8 +73,10 @@ def main() -> None:
         raise SystemExit("Set MEMBER_NAME (and MEMBER_PORT, MEMBER_AGENT_SEED).")
     state = env("MEMBER_STATE_PATH", "./data/member_<name>.json").replace("<name>", name.lower())
     brain = MemberBrain(name, resolve_path(state), env("GROUP_AGENT_ADDRESS"), LLM())
+    endpoint = env("MEMBER_AGENT_ENDPOINT")  # public https://…/submit; empty = Agentverse mailbox
     agent = build_agent(brain, seed=env("MEMBER_AGENT_SEED") or None,
-                        port=int(env("MEMBER_PORT", "8001")))
+                        port=int(env("MEMBER_PORT", "8001")),
+                        mailbox=not endpoint, endpoint=[endpoint] if endpoint else None)
     agent.run()
 
 

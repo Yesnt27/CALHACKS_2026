@@ -49,6 +49,7 @@ def main() -> None:
         spec.append((m["name"].lower(), {
             "MEMBER_NAME": m["name"], "MEMBER_PORT": str(base_port + i),
             "MEMBER_AGENT_SEED": seeds[m["name"]], "GROUP_AGENT_ADDRESS": group_addr,
+            "MEMBER_AGENT_ENDPOINT": env(f"MEMBER_ENDPOINT_{m['name'].upper()}"),
             "MEMBER_STATE_PATH": f"./data/member_{m['name'].lower()}.json"}, ["-m", "member_agent.agent"]))
     for name, extra, cmd in spec:
         log = open(logs / f"{name}.log", "a")
